@@ -1,0 +1,156 @@
+---
+import { Image } from 'astro:assets';
+
+// Grab every photo in src/assets/photos and let Astro optimize each one
+// (resized + converted to webp at build time).
+const modules = import.meta.glob(
+  '../assets/photos/*.{JPG,jpg,jpeg,JPEG,png,PNG,webp,WEBP}',
+  { eager: true }
+);
+const photos = Object.values(modules).map((m: any) => m.default);
+
+// Shuffle (Fisher–Yates), then split in half: one half per column.
+const shuffled = [...photos];
+for (let i = shuffled.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+}
+const mid = Math.ceil(shuffled.length / 2);
+
+// Duration scales with the number of photos so the scroll speed stays
+// constant (and slow) regardless of how many end up in each column.
+const SECONDS_PER_PHOTO = 5;
+
+const columns = [
+  { side: 'left', dir: 'down', items: shuffled.slice(0, mid) },
+  { side: 'right', dir: 'up', items: shuffled.slice(mid) },
+];
+
+// Intrinsic width Astro renders each photo at (columns display them smaller,
+// so this keeps them crisp on high-DPI screens).
+const RENDER_WIDTH = 440;
+---
+
+{
+  columns.map((col) => (
+    <aside
+      class={`photo-col photo-col--${col.side}`}
+      aria-hidden="true"
+      style={`--dur:${Math.max(col.items.length, 1) * SECONDS_PER_PHOTO}s`}
+    >
+      {/* The list is rendered twice so the vertical loop is seamless. */}
+      <div class={`track track--${col.dir}`}>
+        {[...col.items, ...col.items].map((img) => (
+          <figure class="photo">
+            <Image src={img} alt="" width={RENDER_WIDTH} loading="lazy" decoding="async" />
+          </figure>
+        ))}
+      </div>
+    </aside>
+  ))
+}
+
+<style>
+  .photo-col {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: min(300px, calc((100vw - var(--max-width)) / 2 - 2rem));
+    overflow: hidden;
+    z-index: 1;
+    pointer-events: auto;
+    /* Fade the top & bottom edges so photos dissolve into the background. */
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 7%,
+      #000 93%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 7%,
+      #000 93%,
+      transparent 100%
+    );
+  }
+  .photo-col--left {
+    left: 0;
+  }
+  .photo-col--right {
+    right: 0;
+  }
+
+  .track {
+    display: flex;
+    flex-direction: column;
+    padding-inline: 0.9rem;
+    will-change: transform;
+  }
+  .track--up {
+    animation: scroll-up var(--dur) linear infinite;
+  }
+  .track--down {
+    animation: scroll-down var(--dur) linear infinite;
+  }
+
+  /* Stop the whole column the instant a photo is hovered. */
+  .track:has(.photo:hover) {
+    animation-play-state: paused;
+  }
+
+  .photo {
+    position: relative;
+    margin: 0 0 0.9rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    line-height: 0;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .photo :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: blur(3px) saturate(0.92);
+    opacity: 0.82;
+    transition: filter 0.35s ease, opacity 0.35s ease;
+  }
+
+  /* Lift + unblur the hovered photo. */
+  .photo:hover {
+    transform: scale(1.04);
+    z-index: 2;
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45);
+  }
+  .photo:hover :global(img) {
+    filter: none;
+    opacity: 1;
+  }
+
+  @keyframes scroll-up {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
+    }
+  }
+  @keyframes scroll-down {
+    from {
+      transform: translateY(-50%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* No side gutters to fill on smaller screens — hide the columns entirely. */
+  @media (max-width: 1080px) {
+    .photo-col {
+      display: none;
+    }
+  }
+</style>

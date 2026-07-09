@@ -12,6 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@fontsource/vt323": "^5.2.7",
     "serve": "^14.2.4"
   },
   "devDependencies": {

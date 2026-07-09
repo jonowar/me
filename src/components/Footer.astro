@@ -2,19 +2,6 @@
 import { SITE, SOCIALS } from '../consts';
 ---
 
-<section class="section contact" id="contact">
-  <div class="container">
-    <span class="eyebrow">// contact</span>
-    <h2 class="contact-title">Let's build something.</h2>
-    <p class="contact-sub">
-      Have an idea, a role, or just want to say hi? My inbox is open.
-    </p>
-    <a href={`mailto:${SITE.email}`} class="btn btn--primary contact-btn">
-      {SITE.email}
-    </a>
-  </div>
-</section>
-
 <footer class="footer">
   <div class="container container--wide footer-inner">
     <p class="footer-name">© {SITE.name}</p>
@@ -35,32 +22,10 @@ import { SITE, SOCIALS } from '../consts';
 </footer>
 
 <style>
-  .contact {
-    border-top: 1px solid var(--border);
-    text-align: center;
-  }
-
-  .contact-title {
-    font-size: clamp(1.8rem, 6vw, 2.75rem);
-    letter-spacing: -0.04em;
-    margin-bottom: 0.9rem;
-  }
-
-  .contact-sub {
-    color: var(--text-muted);
-    max-width: 40ch;
-    margin: 0 auto 2rem;
-    font-size: 1.08rem;
-  }
-
-  .contact-btn {
-    font-family: var(--font-mono);
-    font-size: 0.95rem;
-  }
-
   .footer {
     border-top: 1px solid var(--border);
     padding-block: 2rem;
+    margin-top: auto;
   }
 
   .footer-inner {
@@ -73,7 +38,7 @@ import { SITE, SOCIALS } from '../consts';
 
   .footer-name {
     color: var(--text-faint);
-    font-size: 0.9rem;
+    font-size: 1.05rem;
   }
 
   .footer-links {
@@ -82,7 +47,7 @@ import { SITE, SOCIALS } from '../consts';
   }
   .footer-links a {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 1.05rem;
   }
   .footer-links a:hover {
     color: var(--text);

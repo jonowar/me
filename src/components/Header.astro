@@ -1,88 +1,18 @@
 ---
-import { SITE } from '../consts';
 import ThemeToggle from './ThemeToggle.astro';
-
-const navItems = [
-  { label: 'Work', href: '#work' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
-];
 ---
 
 <header class="site-header">
   <div class="container container--wide header-inner">
-    <a href="#top" class="brand">{SITE.name}</a>
-
-    <nav class="nav" aria-label="Primary">
-      {
-        navItems.map((item) => (
-          <a href={item.href} class="nav-link">
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
-
     <ThemeToggle />
   </div>
 </header>
 
 <style>
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    backdrop-filter: saturate(180%) blur(12px);
-    background: color-mix(in srgb, var(--bg) 78%, transparent);
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-  }
-
-  /* subtle divider once you scroll past the very top */
-  .site-header {
-    border-bottom-color: var(--border);
-  }
-
   .header-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    justify-content: flex-end;
     height: 4rem;
-  }
-
-  .brand {
-    font-weight: 650;
-    font-size: 1.02rem;
-    letter-spacing: -0.02em;
-    color: var(--text);
-  }
-  .brand:hover {
-    color: var(--accent);
-  }
-
-  .nav {
-    display: flex;
-    gap: 0.35rem;
-    margin-left: auto;
-    margin-right: 0.75rem;
-  }
-
-  .nav-link {
-    padding: 0.4rem 0.75rem;
-    border-radius: 999px;
-    color: var(--text-muted);
-    font-size: 0.92rem;
-    font-weight: 500;
-  }
-  .nav-link:hover {
-    color: var(--text);
-    background: var(--surface);
-  }
-
-  @media (max-width: 560px) {
-    .nav {
-      display: none;
-    }
   }
 </style>
