@@ -1,4 +1,19 @@
 /* ---------------------------------------------------------------------------
+   Fonts
+   Self-hosted VT323 (latin subset — covers all page text). Preloaded in
+   Layout.astro and set to `font-display: block` so text renders invisibly for
+   the brief moment until the font is ready, rather than flashing the monospace
+   fallback and then swapping (avoids FOUT).
+--------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/fonts/vt323-latin-400-normal.woff2') format('woff2');
+}
+
+/* ---------------------------------------------------------------------------
    Design tokens
    Colors are defined as light theme on :root and overridden for dark.
    The `data-theme` attribute (set by an inline script in Layout.astro) wins,
