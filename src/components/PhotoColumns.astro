@@ -31,26 +31,32 @@ const columns = [
 const RENDER_WIDTH = 440;
 ---
 
-{
-  columns.map((col) => (
-    <aside
-      class={`photo-col photo-col--${col.side}`}
-      aria-hidden="true"
-      style={`--dur:${Math.max(col.items.length, 1) * SECONDS_PER_PHOTO}s`}
-    >
-      {/* The list is rendered twice so the vertical loop is seamless. */}
-      <div class={`track track--${col.dir}`}>
-        {[...col.items, ...col.items].map((img) => (
-          <figure class="photo">
-            <Image src={img} alt="" width={RENDER_WIDTH} loading="lazy" decoding="async" />
-          </figure>
-        ))}
-      </div>
-    </aside>
-  ))
-}
+<div class="photo-cols" aria-hidden="true">
+  {
+    columns.map((col) => (
+      <aside
+        class={`photo-col photo-col--${col.side}`}
+        style={`--dur:${Math.max(col.items.length, 1) * SECONDS_PER_PHOTO}s`}
+      >
+        {/* The list is rendered twice so the vertical loop is seamless. */}
+        <div class={`track track--${col.dir}`}>
+          {[...col.items, ...col.items].map((img) => (
+            <figure class="photo">
+              <Image src={img} alt="" width={RENDER_WIDTH} loading="lazy" decoding="async" />
+            </figure>
+          ))}
+        </div>
+      </aside>
+    ))
+  }
+</div>
 
 <style>
+  /* Desktop: the wrapper generates no box; each column is fixed to a gutter. */
+  .photo-cols {
+    display: contents;
+  }
+
   .photo-col {
     position: fixed;
     top: 0;
@@ -147,10 +153,34 @@ const RENDER_WIDTH = 440;
     }
   }
 
-  /* No side gutters to fill on smaller screens — hide the columns entirely. */
+  /* Mobile: no side gutters to fill, so lay the two carousels side by side and
+     let them fill the bottom of the (locked, no-scroll) screen — left column
+     scrolling down, right column scrolling up. */
   @media (max-width: 1080px) {
+    .photo-cols {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      /* basis 0 (not auto) so the tall stacked-image content doesn't inflate
+         the flex base size and steal height from the hero above. */
+      flex: 1 1 0;
+      min-height: 0;
+      width: 100%;
+      padding: 0 0.5rem 0.5rem;
+      overflow: hidden;
+    }
     .photo-col {
-      display: none;
+      position: static;
+      width: auto;
+      height: 100%;
+      flex: 1 1 0;
+      min-height: 0;
+    }
+    .track {
+      padding-inline: 0.35rem;
+    }
+    .photo {
+      margin-bottom: 0.5rem;
     }
   }
 </style>

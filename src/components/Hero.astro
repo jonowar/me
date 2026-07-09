@@ -18,15 +18,7 @@ const after = rest.join('.');
           <li class="project">
             <span class="marker" aria-hidden="true">&gt;</span>
             {p.href ? (
-              <a
-                href={p.href}
-                target={p.href.startsWith('http') ? '_blank' : undefined}
-                rel={
-                  p.href.startsWith('http') ? 'noopener noreferrer' : undefined
-                }
-              >
-                {p.name}
-              </a>
+              <a href={p.href}>{p.name}</a>
             ) : (
               <span>{p.name}</span>
             )}
@@ -95,5 +87,13 @@ const after = rest.join('.');
 
   .desc {
     color: var(--text-muted);
+  }
+
+  /* Tighten the hero on mobile so the carousels below get more of the screen. */
+  @media (max-width: 1080px) {
+    .hero {
+      padding-top: 1rem;
+      padding-bottom: 1.5rem;
+    }
   }
 </style>

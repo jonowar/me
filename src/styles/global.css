@@ -246,3 +246,25 @@ h3 {
   white-space: nowrap;
   border: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Mobile: lock the page to exactly one screen — never scroll. The hero sits
+   at the top and the photo carousels (PhotoColumns) fill the space down to
+   the footer.
+--------------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  html {
+    overflow: hidden;
+  }
+  body {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+  main {
+    /* Fixed natural height at the top — never grow or shrink; the carousels
+       below fill whatever is left. */
+    flex: 0 0 auto;
+    min-height: 0;
+  }
+}
