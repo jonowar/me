@@ -1,0 +1,149 @@
+---
+import { PROJECTS } from '../consts';
+---
+
+<section class="section" id="work">
+  <div class="container container--wide">
+    <span class="eyebrow">// selected work</span>
+    <h2 class="section-title">Things I've built</h2>
+
+    <div class="grid">
+      {
+        PROJECTS.map((p) => (
+          <article class="card">
+            <div class="card-head">
+              <h3 class="card-title">{p.name}</h3>
+              {p.meta && <span class="card-meta">{p.meta}</span>}
+            </div>
+
+            <p class="card-desc">{p.description}</p>
+
+            {p.tags.length > 0 && (
+              <ul class="card-tags">
+                {p.tags.map((t) => (
+                  <li class="pill">{t}</li>
+                ))}
+              </ul>
+            )}
+
+            <div class="card-links">
+              {p.href && (
+                <a
+                  href={p.href}
+                  class="card-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Visit
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M7 17 17 7M9 7h8v8"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      fill="none"
+                    />
+                  </svg>
+                </a>
+              )}
+              {p.repo && (
+                <a
+                  href={p.repo}
+                  class="card-link card-link--muted"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Source
+                </a>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.6rem;
+    transition: transform 0.18s ease, border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow);
+  }
+
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+  }
+
+  .card-meta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+
+  .card-desc {
+    color: var(--text-muted);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin-bottom: 1.3rem;
+  }
+
+  .card-links {
+    display: flex;
+    gap: 1.1rem;
+    margin-top: auto;
+  }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.92rem;
+    font-weight: 550;
+    color: var(--accent);
+  }
+  .card-link svg {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+  .card-link--muted {
+    color: var(--text-muted);
+  }
+  .card-link--muted:hover {
+    color: var(--text);
+  }
+</style>

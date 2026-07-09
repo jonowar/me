@@ -1,0 +1,20 @@
+{
+  "name": "me",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal page & portfolio for Jono Warren",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "serve dist -s -l tcp://0.0.0.0:${PORT:-3000}",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  },
+  "devDependencies": {
+    "astro": "^5.6.1"
+  }
+}
