@@ -184,3 +184,54 @@ const RENDER_WIDTH = 440;
     }
   }
 </style>
+
+<script>
+  // The frontmatter shuffle above runs at build time, so the baked-in HTML
+  // shows the same order to every visitor (and acts as a no-JS fallback).
+  // Reshuffle on the client so the arrangement is randomized on each load.
+  const SECONDS_PER_PHOTO = 5;
+
+  function shuffle(arr: unknown[]) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function randomizePhotos() {
+    const cols = document.querySelector('.photo-cols');
+    if (!cols) return;
+    const tracks = cols.querySelectorAll<HTMLElement>('.track');
+    if (tracks.length < 2) return;
+
+    // Each track renders its photos twice for the seamless loop, so gather the
+    // unique figures across both columns (deduped by image src).
+    const seen = new Set<string>();
+    const figures: HTMLElement[] = [];
+    tracks.forEach((track) => {
+      track.querySelectorAll<HTMLElement>('.photo').forEach((fig) => {
+        const src = fig.querySelector('img')?.getAttribute('src') ?? '';
+        if (seen.has(src)) return;
+        seen.add(src);
+        figures.push(fig);
+      });
+    });
+
+    shuffle(figures);
+    const mid = Math.ceil(figures.length / 2);
+    const halves = [figures.slice(0, mid), figures.slice(mid)];
+
+    tracks.forEach((track, i) => {
+      const items = halves[i] ?? [];
+      track.replaceChildren();
+      // Render each half twice so the vertical loop stays seamless.
+      [...items, ...items].forEach((fig) => track.appendChild(fig.cloneNode(true)));
+      // Rescale the animation duration so scroll speed stays constant.
+      const col = track.closest<HTMLElement>('.photo-col');
+      col?.style.setProperty('--dur', `${Math.max(items.length, 1) * SECONDS_PER_PHOTO}s`);
+    });
+  }
+
+  randomizePhotos();
+</script>
