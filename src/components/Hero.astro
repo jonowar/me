@@ -1,5 +1,5 @@
 ---
-import { SITE, PROJECTS } from '../consts';
+import { SITE, BIO, PROJECTS } from '../consts';
 
 // Split the title on the dot so we can accent the "." like a logo.
 const [before, ...rest] = SITE.title.split('.');
@@ -11,6 +11,10 @@ const after = rest.join('.');
     <h1 class="display">
       {before}<span class="dot">.</span>{after}
     </h1>
+
+    <p class="bio">
+      {BIO.map((line) => <span class="bio-line">{line}</span>)}
+    </p>
 
     <ul class="projects">
       {
@@ -46,13 +50,26 @@ const after = rest.join('.');
     line-height: 0.92;
     letter-spacing: 0;
     white-space: nowrap;
-    margin-bottom: clamp(1.75rem, 5vw, 3rem);
+    margin-bottom: clamp(0.75rem, 2.5vw, 1.25rem);
     /* subtle CRT-style glow, kept faint so it reads in both themes */
     text-shadow: 0 0 22px color-mix(in srgb, var(--accent) 22%, transparent);
   }
 
   .dot {
     color: var(--accent);
+  }
+
+  .bio {
+    color: var(--text-muted);
+    font-size: clamp(1.2rem, 3.2vw, 1.6rem);
+    line-height: 1.35;
+    margin-bottom: clamp(1.75rem, 5vw, 3rem);
+  }
+
+  /* Each fact gets its own line — the breaks are authored in consts.ts,
+     not left to wrapping. */
+  .bio-line {
+    display: block;
   }
 
   .projects {

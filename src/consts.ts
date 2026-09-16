@@ -13,6 +13,13 @@ export const SITE = {
   description: 'Jono.Solutions — projects by Jono Warren.',
 };
 
+/** Bio shown under the title — one fact per line, rendered as written. */
+export const BIO = [
+  'Jono is a software engineer',
+  'living in San Francisco',
+  'who likes other things too.',
+];
+
 /** Links shown in the footer. */
 export const SOCIALS: { label: string; href: string }[] = [
   { label: 'GitHub', href: 'https://github.com/jonowar' },
