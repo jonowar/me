@@ -1,5 +1,5 @@
 ---
-import { SITE, BIO, PROJECTS } from '../consts';
+import { SITE, BIO, PROJECTS_LABEL, PROJECTS } from '../consts';
 
 // Split the title on the dot so we can accent the "." like a logo.
 const [before, ...rest] = SITE.title.split('.');
@@ -15,6 +15,8 @@ const after = rest.join('.');
     <p class="bio">
       {BIO.map((line) => <span class="bio-line">{line}</span>)}
     </p>
+
+    <h2 class="projects-label">{PROJECTS_LABEL}</h2>
 
     <ul class="projects">
       {
@@ -70,6 +72,16 @@ const after = rest.join('.');
      not left to wrapping. */
   .bio-line {
     display: block;
+  }
+
+  .projects-label {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--text-faint);
+    margin-bottom: 0.5rem;
   }
 
   .projects {
