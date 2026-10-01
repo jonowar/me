@@ -37,8 +37,9 @@ export type Project = {
 /** Heading shown above the project list. */
 export const PROJECTS_LABEL = 'projects';
 
-/** The two projects shown as bullet points, linked to their subdomains. */
+/** Projects shown as bullet points, linked to their subdomains. */
 export const PROJECTS: Project[] = [
   { name: 'fapiao', href: 'https://fapiao.jono.solutions' },
   { name: 'shushu', href: 'https://shushu.jono.solutions' },
+  { name: 'deleet', href: 'https://deleet.jono.solutions' },
 ];
