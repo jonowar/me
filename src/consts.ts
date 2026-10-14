@@ -28,10 +28,14 @@ export const SOCIALS: { label: string; href: string }[] = [
 
 export type Project = {
   name: string;
-  /** Optional one-liner shown after the name. */
+  /** Optional short blurb — beside the name on wide screens, underneath on mobile. */
   description?: string;
   /** Optional link — the name becomes clickable if set. */
   href?: string;
+  /** Optional short stack line, e.g. 'expo · fastapi'. */
+  tech?: string;
+  /** Optional extra links shown after the description (e.g. source, download). */
+  links?: { label: string; href: string }[];
 };
 
 /** Heading shown above the project list. */
@@ -39,7 +43,34 @@ export const PROJECTS_LABEL = 'projects';
 
 /** Projects shown as bullet points, linked to their subdomains. */
 export const PROJECTS: Project[] = [
-  { name: 'fapiao', href: 'https://fapiao.jono.solutions' },
-  { name: 'shushu', href: 'https://shushu.jono.solutions' },
-  { name: 'deleet', href: 'https://deleet.jono.solutions' },
+  {
+    name: 'fapiao',
+    description: 'scan and sort invoices',
+    tech: 'expo · fastapi · postgres',
+    href: 'https://fapiao.jono.solutions',
+  },
+  {
+    name: 'shushu',
+    description: 'count things together, live',
+    tech: 'expo · fastapi · redis',
+    href: 'https://shushu.jono.solutions',
+  },
+  {
+    name: 'deleet',
+    description: 'guess the question from the code',
+    tech: 'vanilla js',
+    href: 'https://deleet.jono.solutions',
+  },
+  {
+    name: 'instrument',
+    description: 'turn a prompt into sound',
+    tech: 'electron · supercollider',
+    links: [
+      { label: 'github', href: 'https://github.com/jonowar/instrument' },
+      {
+        label: '.dmg',
+        href: 'https://github.com/jonowar/instrument/releases/download/v1.0.2/AnInstrument-1.0.2-arm64.dmg',
+      },
+    ],
+  },
 ];
