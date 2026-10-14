@@ -69,7 +69,7 @@ export const PROJECTS: Project[] = [
       { label: 'github', href: 'https://github.com/jonowar/instrument' },
       {
         label: '.dmg',
-        href: 'https://github.com/jonowar/instrument/releases/download/v1.0.2/AnInstrument-1.0.2-arm64.dmg',
+        href: 'https://github.com/jonowar/instrument/releases/latest/download/AnInstrument-arm64.dmg',
       },
     ],
   },
