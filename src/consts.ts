@@ -65,6 +65,7 @@ export const PROJECTS: Project[] = [
     name: 'instrument',
     description: 'turn a prompt into sound',
     tech: 'electron · supercollider',
+    href: 'https://github.com/jonowar/instrument/releases/latest/download/AnInstrument-arm64.dmg',
     links: [
       { label: 'github', href: 'https://github.com/jonowar/instrument' },
       {
