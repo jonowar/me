@@ -23,6 +23,7 @@ export const BIO = [
 /** Links shown in the footer. */
 export const SOCIALS: { label: string; href: string }[] = [
   { label: 'GitHub', href: 'https://github.com/jonowar' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jono-warren-64183114/' },
   { label: 'Email', href: `mailto:${SITE.email}` },
 ];
 
