@@ -51,7 +51,14 @@ const RENDER_WIDTH = 440;
   }
 </div>
 
+<!-- Mobile only: photos dissolve in and out behind the text (filled by the script). -->
+<div class="float-pane" aria-hidden="true"></div>
+
 <style>
+  .float-pane {
+    display: none;
+  }
+
   /* Desktop: the wrapper generates no box; each column is fixed to a gutter. */
   .photo-cols {
     display: contents;
@@ -153,34 +160,59 @@ const RENDER_WIDTH = 440;
     }
   }
 
-  /* Mobile: no side gutters to fill, so lay the two carousels side by side and
-     let them fill the bottom of the (locked, no-scroll) screen — left column
-     scrolling down, right column scrolling up. */
+  /* Mobile: no side gutters, so instead of columns a pane on the right fades
+     photos in and out at random positions and sizes, behind the text (and
+     sometimes under it). The page itself stays locked to one screen. */
   @media (max-width: 1080px) {
     .photo-cols {
-      display: flex;
-      flex-direction: row;
-      gap: 0.5rem;
-      /* basis 0 (not auto) so the tall stacked-image content doesn't inflate
-         the flex base size and steal height from the hero above. */
-      flex: 1 1 0;
-      min-height: 0;
-      width: 100%;
-      padding: 0 0.5rem 0.5rem;
+      display: none;
+    }
+    .float-pane {
+      display: block;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 62%;
       overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
     }
-    .photo-col {
-      position: static;
-      width: auto;
-      height: 100%;
-      flex: 1 1 0;
-      min-height: 0;
+    .float-pane :global(.float-photo) {
+      position: absolute;
+      margin: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      line-height: 0;
+      opacity: 0;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      animation: float-dissolve var(--fdur, 9s) ease-in-out var(--fdelay, 0s) 1
+        both;
     }
-    .track {
-      padding-inline: 0.35rem;
+    .float-pane :global(.float-photo img) {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: saturate(0.92);
     }
-    .photo {
-      margin-bottom: 0.5rem;
+  }
+
+  @keyframes float-dissolve {
+    0% {
+      opacity: 0;
+      transform: translateY(14px) scale(0.94);
+      filter: blur(6px);
+    }
+    25%,
+    70% {
+      opacity: var(--fmax, 0.7);
+      filter: blur(1.5px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-14px) scale(1.04);
+      filter: blur(6px);
     }
   }
 </style>
@@ -234,4 +266,74 @@ const RENDER_WIDTH = 440;
   }
 
   randomizePhotos();
+
+  // ---- Mobile floating photos ------------------------------------------------
+  const mql = window.matchMedia('(max-width: 1080px)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const SLOTS = 6;
+  let active = false;
+
+  function rand(min: number, max: number) {
+    return min + Math.random() * (max - min);
+  }
+
+  function floatPhotos() {
+    const pane = document.querySelector<HTMLElement>('.float-pane');
+    if (!pane) return;
+
+    // Unique photo sources from the (hidden-on-mobile) column markup.
+    const srcs = [
+      ...new Set(
+        Array.from(document.querySelectorAll<HTMLImageElement>('.photo-cols img'))
+          .map((img) => img.getAttribute('src') ?? '')
+          .filter(Boolean)
+      ),
+    ];
+    if (!srcs.length) return;
+    let queue: string[] = [];
+    const nextSrc = () => {
+      if (!queue.length) queue = shuffle([...srcs]) as string[];
+      return queue.pop()!;
+    };
+
+    const place = (fig: HTMLElement, first: boolean) => {
+      const w = rand(70, 170);
+      const img = fig.querySelector('img')!;
+      img.src = nextSrc();
+      fig.style.width = `${w}px`;
+      // Mostly on the right, sometimes bleeding off the edge; the pane's left
+      // edge sits under the text, so some drift beneath it.
+      fig.style.right = `${rand(-w * 0.25, pane.clientWidth - w * 0.9)}px`;
+      fig.style.top = `${rand(-5, 92)}%`;
+      fig.style.setProperty('--fdur', `${rand(7, 12)}s`);
+      fig.style.setProperty('--fdelay', `${first ? rand(0, 6) : rand(0, 1.5)}s`);
+      fig.style.setProperty('--fmax', `${rand(0.45, 0.85)}`);
+      // Restart the animation.
+      fig.style.animation = 'none';
+      void fig.offsetWidth;
+      fig.style.animation = '';
+    };
+
+    pane.replaceChildren();
+    for (let i = 0; i < SLOTS; i++) {
+      const fig = document.createElement('figure');
+      fig.className = 'float-photo';
+      fig.appendChild(document.createElement('img')).alt = '';
+      fig.addEventListener('animationend', () => {
+        if (active) place(fig, false);
+      });
+      pane.appendChild(fig);
+      place(fig, true);
+    }
+  }
+
+  function sync() {
+    const pane = document.querySelector<HTMLElement>('.float-pane');
+    active = mql.matches && !reduceMotion.matches;
+    if (active) floatPhotos();
+    else pane?.replaceChildren();
+  }
+
+  sync();
+  mql.addEventListener('change', sync);
 </script>

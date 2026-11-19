@@ -45,6 +45,12 @@ import { SITE, SOCIALS } from '../consts';
     color: var(--text);
   }
 
+  @media (min-width: 1081px) {
+    .footer {
+      padding-block: clamp(0.75rem, 3vh, 2rem);
+    }
+  }
+
   @media (max-width: 1080px) {
     .footer {
       padding-block: 0.9rem;

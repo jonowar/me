@@ -171,6 +171,27 @@ const after = rest.join('.');
     }
   }
 
+  /* Short desktop screens (laptops): shrink spacing and type with the viewport
+     height so the whole page fits without scrolling. */
+  @media (min-width: 1081px) {
+    .hero {
+      padding-top: clamp(0.5rem, 4vh, 5rem);
+      padding-bottom: clamp(0.5rem, 2.5vh, 6rem);
+    }
+    .display {
+      font-size: clamp(3rem, 11vh, 6.5rem);
+      margin-bottom: clamp(0.5rem, 1.5vh, 1.25rem);
+    }
+    .bio {
+      font-size: clamp(1.1rem, 3vh, 1.6rem);
+      margin-bottom: clamp(1rem, 3.5vh, 3rem);
+    }
+    .projects {
+      gap: clamp(0.4rem, 1.4vh, 0.9rem);
+      font-size: clamp(1.3rem, 3.8vh, 2.4rem);
+    }
+  }
+
   /* Tighten the hero on mobile so the carousels below get more of the screen. */
   @media (max-width: 1080px) {
     .hero {
