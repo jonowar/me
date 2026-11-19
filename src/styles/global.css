@@ -264,8 +264,7 @@ h3 {
 
 /* ---------------------------------------------------------------------------
    Mobile: lock the page to exactly one screen — never scroll. The hero sits
-   at the top and the photo carousels (PhotoColumns) fill the space down to
-   the footer.
+   at the top and the floating photo pane (PhotoColumns) sits behind it.
 --------------------------------------------------------------------------- */
 @media (max-width: 1080px) {
   html {
@@ -279,7 +278,14 @@ h3 {
   main {
     /* Fixed natural height at the top — never grow or shrink; the carousels
        below fill whatever is left. */
-    flex: 0 0 auto;
+    flex: 1 1 auto;
     min-height: 0;
+  }
+  /* Sit above the floating photo pane (z-index 0). */
+  .site-header,
+  main,
+  .footer {
+    position: relative;
+    z-index: 2;
   }
 }
